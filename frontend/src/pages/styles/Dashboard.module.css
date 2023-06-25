@@ -1,0 +1,87 @@
+.pageTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1d61d0;
+  margin-top: 8px;
+}
+
+.menu {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.tableContainer {
+  margin-top: 24px;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.emptyText {
+  text-align: center;
+  padding: 24px;
+}
+
+.product {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.productImage {
+  width: 100px;
+  height: auto;
+  object-fit: cover;
+}
+
+.productName {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.actionContainer,
+.rowsText {
+  position: relative;
+  bottom: 24px;
+}
+
+.btnAction {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.iconEdit {
+  font-size: 20px;
+  color: green;
+}
+
+.iconDelete {
+  font-size: 20px;
+  color: red;
+}
+
+.deleteCOnfirmationTitle {
+  margin-bottom: 14px;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.deleteCOnfirmationText {
+  font-size: 16px;
+}
+
+.btnConfirmation {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+@media screen and (max-width: 720px) {
+  .content {
+    width: 1200px;
+  }
+}
