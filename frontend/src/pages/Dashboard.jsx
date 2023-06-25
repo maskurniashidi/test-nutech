@@ -20,7 +20,7 @@ function Dashboard() {
     const [searchTerm, setSearchTerm] = useState('');
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [productToDelete, setProductToDelete] = useState(null);
-
+    const [loadingAction, setLoadingAction] = useState(false);
     // Side Effect
     useEffect(() => {
         let config = {
@@ -49,6 +49,7 @@ function Dashboard() {
 
     // Function
     const handleDeleteProduct = (productId) => {
+        setLoadingAction(true);
         let config = {
             method: 'delete',
             url: `${BASE_API_URL}/product/${productId}`,
@@ -60,6 +61,7 @@ function Dashboard() {
         axios.request(config)
             .then((response) => {
                 setProducts(products.filter((product) => product.id !== productId));
+                setLoadingAction(false)
             })
             .catch((error) => {
                 if (error.response.status === 401 || error.response.status === 403) {
@@ -67,6 +69,7 @@ function Dashboard() {
                 } else {
                     console.log("Error:", error);
                 }
+                setLoadingAction(false)
             });
 
         setProductToDelete(null);
@@ -106,7 +109,8 @@ function Dashboard() {
     const rows = filteredProducts.map((product) => ({
         "Produk": (
             <div className={styles.product}>
-                <img src={`http://localhost:3010/uploads/${product.foto}`} alt="tes" className={styles.productImage} />
+                {/* <img src={`http://localhost:3010/uploads/${product.foto}`} alt="tes" className={styles.productImage} /> */}
+                <img src={`https://api-nutech.project101.site/uploads/${product.foto}`} alt="tes" className={styles.productImage} />
                 <p className={styles.productName}>{product.nama}</p>
             </div>
         ),
@@ -168,7 +172,9 @@ function Dashboard() {
                                     <h2 className={styles.deleteCOnfirmationTitle}>Konfirmasi!</h2>
                                     <p className={styles.deleteCOnfirmationText}>Anda yakin ingin menghapus produk?</p>
                                     <div className={styles.btnConfirmation}>
-                                        <Button text="Hapus" onClick={() => handleDeleteProduct(productToDelete)} color="#1890ff" width="100px" />
+                                        {
+                                            loadingAction ? <Button text="Loading..." onClick={() => handleDeleteProduct(productToDelete)} color="#1890ff" width="100px" /> : <Button text="Hapus" onClick={() => handleDeleteProduct(productToDelete)} color="#1890ff" width="100px" />
+                                        }
                                         <Button text="Batal" onClick={handleCancelDelete} color="red" width="100px" />
                                     </div>
                                 </div>

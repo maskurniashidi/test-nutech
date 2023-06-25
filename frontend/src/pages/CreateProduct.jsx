@@ -18,7 +18,7 @@ function CreateProduct({ onClose }) {
     const [showAlert, setShowAlert] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
     const [message, setMessage] = useState("");
-
+    const [loadingAction, setLoadingAction] = useState(false);
     // Function
     const closeAlert = () => {
         setShowAlert(false);
@@ -41,6 +41,7 @@ function CreateProduct({ onClose }) {
     };
 
     const handleSubmit = () => {
+        setLoadingAction(true)
         setShowMessage(false);
 
         const formData = new FormData();
@@ -64,6 +65,7 @@ function CreateProduct({ onClose }) {
         axios.request(config)
             .then((response) => {
                 setShowMessage(true)
+                setLoadingAction(false)
                 setTimeout(() => {
                     window.location.reload();
                 }, 1000);
@@ -78,6 +80,7 @@ function CreateProduct({ onClose }) {
                 if (error.response.data.message) {
                     errorMessage = error.response.data.message;
                 }
+                setLoadingAction(false)
                 setMessage(errorMessage);
                 setShowAlert(true);
                 console.log(error);
@@ -145,7 +148,9 @@ function CreateProduct({ onClose }) {
                 </div>
             </div>
             <div className={styles.btnAction}>
-                <Button text="Buat" onClick={handleSubmit} color="#1890ff" width="100%" />
+                {
+                    loadingAction ? <Button text="Loading..." onClick={handleSubmit} color="#1890ff" width="100%" /> : <Button text="Buat" onClick={handleSubmit} color="#1890ff" width="100%" />
+                }
                 <Button text="Batal" onClick={onClose} color="red" width="100%" />
             </div>
         </Modal>

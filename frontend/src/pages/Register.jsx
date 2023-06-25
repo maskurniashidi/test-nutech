@@ -17,6 +17,7 @@ const Register = () => {
     const [showMessage, setShowMessage] = useState(false);
     const [message, setMessage] = useState('');
     const [showAlert, setShowAlert] = useState(false);
+    const [loadingAction, setLoadingAction] = useState(false);
 
     // Function
     const closeAlert = () => {
@@ -33,6 +34,7 @@ const Register = () => {
 
     const handleSubmit = async () => {
         setShowMessage(false);
+        setLoadingAction(true)
 
         const data = JSON.stringify({
             email: user.email,
@@ -53,6 +55,7 @@ const Register = () => {
             .then((response) => {
                 setShowAlert(false);
                 setShowMessage(true);
+                setLoadingAction(false)
             })
             .catch((error) => {
                 if (error.response.data.message) {
@@ -61,6 +64,7 @@ const Register = () => {
                     setMessage('Error tidak diketahui');
                 }
                 setShowAlert(true)
+                setLoadingAction(false)
                 console.log(error);
             });
     };
@@ -107,7 +111,9 @@ const Register = () => {
                     </div>
 
                 </div>
-                <Button text="Daftar" onClick={handleSubmit} color="#1890ff" width="100%" />
+                {
+                    loadingAction ? <Button text="Loading..." onClick={handleSubmit} color="#1890ff" width="100%" /> : <Button text="Daftar" onClick={handleSubmit} color="#1890ff" width="100%" />
+                }
                 <div className={styles.loginLink}>
                     Sudah punya akun? <Link to="/">Masuk di sini</Link>
                 </div>

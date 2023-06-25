@@ -19,6 +19,8 @@ function UpdateProduct({ productId, onClose }) {
     const [showAlert, setShowAlert] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
     const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(true)
+    const [loadingAction, setLoadingAction] = useState(false);
 
     const closeAlert = () => {
         setShowAlert(false);
@@ -41,6 +43,7 @@ function UpdateProduct({ productId, onClose }) {
     };
 
     const handleUpdate = () => {
+        setLoadingAction(true)
         setShowMessage(false);
 
         const data = new FormData();
@@ -67,6 +70,7 @@ function UpdateProduct({ productId, onClose }) {
                 setTimeout(() => {
                     window.location.reload();
                 }, 1000);
+                setLoadingAction(false)
             })
             .catch((error) => {
                 let errorMessage = "Error tidak diketahui";
@@ -74,7 +78,7 @@ function UpdateProduct({ productId, onClose }) {
                 if (error.response.data.message) {
                     errorMessage = error.response.data.message;
                 }
-
+                setLoadingAction(false)
                 setMessage(errorMessage);
                 setShowAlert(true);
                 console.log(error);
@@ -93,11 +97,13 @@ function UpdateProduct({ productId, onClose }) {
         axios.request(config)
             .then((response) => {
                 setProduct(response.data);
+                setLoading(false)
             })
             .catch((error) => {
                 if (error.response.status === 401 || error.response.status === 403) {
                     onLogout();
                 }
+                setLoading(false)
                 console.log(error)
             });
     }, []);
@@ -106,67 +112,73 @@ function UpdateProduct({ productId, onClose }) {
 
     return (
         <Modal>
-            <div className={styles.formContainer}>
-                <h1 className={styles.cardTitle}>Ubah Produk</h1>
-                {showMessage && <Message text="Produk berhasil diubah" duration={3000} type="success" />}
-                {showAlert && (
-                    <Alert type="error" message={message} onClose={closeAlert} />
-                )}
-                <div className={styles.formField}>
-                    <label>Nama</label>
-                    <Input
-                        type="text"
-                        name="nama"
-                        value={product.nama}
-                        onChange={handleInputChange}
-                        width="400px"
-                    />
-                </div>
-                <div className={styles.formField}>
-                    <label>Harga Beli</label>
-                    <Input
-                        type="number"
-                        name="harga_beli"
-                        value={product.harga_beli}
-                        onChange={handleInputChange}
-                        width="400px"
-                    />
-                </div>
-                <div className={styles.formField}>
-                    <label>Harga Jual</label>
-                    <Input
-                        type="number"
-                        name="harga_jual"
-                        value={product.harga_jual}
-                        onChange={handleInputChange}
-                        width="400px"
-                    />
-                </div>
-                <div className={styles.formField}>
-                    <label>Stok</label>
-                    <Input
-                        type="number"
-                        name="stok"
-                        value={product.stok}
-                        onChange={handleInputChange}
-                        width="400px"
-                    />
-                </div>
-                <div className={styles.formField}>
-                    <label>Foto</label>
-                    <input
-                        type="file"
-                        name="foto"
-                        onChange={handleFileChange}
-                    />
-                </div>
+            {
+                loading !== true &&
+                <div className={styles.formContainer}>
+                    <h1 className={styles.cardTitle}>Ubah Produk</h1>
+                    {showMessage && <Message text="Produk berhasil diubah" duration={3000} type="success" />}
+                    {showAlert && (
+                        <Alert type="error" message={message} onClose={closeAlert} />
+                    )}
+                    <div className={styles.formField}>
+                        <label>Nama</label>
+                        <Input
+                            type="text"
+                            name="nama"
+                            value={product.nama}
+                            onChange={handleInputChange}
+                            width="400px"
+                        />
+                    </div>
+                    <div className={styles.formField}>
+                        <label>Harga Beli</label>
+                        <Input
+                            type="number"
+                            name="harga_beli"
+                            value={product.harga_beli}
+                            onChange={handleInputChange}
+                            width="400px"
+                        />
+                    </div>
+                    <div className={styles.formField}>
+                        <label>Harga Jual</label>
+                        <Input
+                            type="number"
+                            name="harga_jual"
+                            value={product.harga_jual}
+                            onChange={handleInputChange}
+                            width="400px"
+                        />
+                    </div>
+                    <div className={styles.formField}>
+                        <label>Stok</label>
+                        <Input
+                            type="number"
+                            name="stok"
+                            value={product.stok}
+                            onChange={handleInputChange}
+                            width="400px"
+                        />
+                    </div>
+                    <div className={styles.formField}>
+                        <label>Foto</label>
+                        <input
+                            type="file"
+                            name="foto"
+                            accept=".jpg, .png"
+                            onChange={handleFileChange}
+                        />
+                    </div>
 
-                <div className={styles.btnAction}>
-                    <Button text="Ubah" onClick={handleUpdate} color="#1890ff" width="100%" />
-                    <Button text="Batal" onClick={onClose} color="red" width="100%" />
-                </div>
+                    <div className={styles.btnAction}>
+                        {
+                            loadingAction ? <Button text="Loading..." onClick={handleUpdate} color="#1890ff" width="100%" /> : <Button text="Ubah" onClick={handleUpdate} color="#1890ff" width="100%" />
+                        }
+                        <Button text="Batal" onClick={onClose} color="red" width="100%" />
+                    </div>
 
-            </div>
+                </div>
+            }
         </Modal>
     );
 }

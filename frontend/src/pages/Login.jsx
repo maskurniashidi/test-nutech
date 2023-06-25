@@ -17,6 +17,7 @@ const Login = () => {
     const [message, setMessage] = useState("");
     const [showMessage, setShowMessage] = useState(false)
     const [showPassword, setShowPassword] = useState(false);
+    const [loadingAction, setLoadingAction] = useState(false);
     const navigate = useNavigate();
 
 
@@ -38,6 +39,7 @@ const Login = () => {
     };
 
     const handleSubmit = async () => {
+        setLoadingAction(true)
         setShowMessage(false)
         if (showAlert) {
             setShowAlert(!showAlert)
@@ -61,9 +63,11 @@ const Login = () => {
             .then((response) => {
                 setShowMessage(true)
                 localStorage.setItem('accessToken', response.data.token);
+                setLoadingAction(false)
                 setTimeout(() => {
                     navigate('/dashboard');
                 }, 1000);
+
             })
             .catch((error) => {
                 let errorMessage = "Error tidak diketahui";
@@ -72,6 +76,7 @@ const Login = () => {
                 }
                 setMessage(errorMessage);
                 setShowAlert(true);
+                setLoadingAction(false)
                 console.log(error);
             });
     };
@@ -111,7 +116,10 @@ const Login = () => {
                         Tampilkan Kata Sandi
                     </label>
                 </div>
-                <Button text="Masuk" onClick={handleSubmit} color="#1890ff" width="100%" />
+                {
+                    loadingAction ? <Button text="Loading..." onClick={handleSubmit} color="#1890ff" width="100%" /> : <Button text="Masuk" onClick={handleSubmit} color="#1890ff" width="100%" />
+                }
+
                 <div className={styles.signupLink}>
                     Belum punya akun? <Link to="/register">Daftar di sini</Link>
                 </div>
