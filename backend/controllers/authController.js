@@ -1,5 +1,5 @@
 require("dotenv").config();
-const bcrypt = require("bcrypt");
+const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.js");
 
@@ -10,8 +10,8 @@ const login = (req, res) => {
       if (!user) {
         return res.status(404).json({ message: "Email tidak terdaftar" });
       }
-      bcrypt
-        .compare(password, user.password)
+      argon2
+        .verify(user.password, password)
         .then((isMatch) => {
           if (!isMatch) {
             return res.status(401).json({ message: "Kata sandi salah" });
@@ -44,8 +44,8 @@ const register = (req, res) => {
         return res.status(409).json({ message: "Email sudah terdaftar" });
       }
 
-      bcrypt
-        .hash(password, 10)
+      argon2
+        .hash(password)
         .then((hashedPassword) => {
           User.create({ email, password: hashedPassword, role })
             .then(() => {

@@ -1,10 +1,8 @@
 import React, { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-
-const Dashboard = React.lazy(() => import("./pages/Dashboard"));
-const Login = React.lazy(() => import("./pages/Login"));
-const Register = React.lazy(() => import("./pages/Register"));
-
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 const App = () => {
   return (
     <Router>
@@ -29,9 +27,7 @@ const App = () => {
           path="/dashboard"
           element={
             <PrivateRoute>
-              <Suspense fallback={<div>Loading...</div>}>
-                <Dashboard />
-              </Suspense>
+              <Dashboard />
             </PrivateRoute>
           }
         />

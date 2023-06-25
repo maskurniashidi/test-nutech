@@ -17,6 +17,16 @@ const port = process.env.PORT || 3000;
 //   .catch((error) => {
 //     console.error("Error creating database and tables:", error);
 //   });
+
+sequelize
+  .sync()
+  .then(() => {
+    console.log("Database and tables created");
+  })
+  .catch((error) => {
+    console.error("Error creating database and tables:", error);
+  });
+
 app.use(cors());
 app.options("*", cors());
 app.use(express.json());
