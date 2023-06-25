@@ -54,7 +54,7 @@ function UpdateProduct({ productId, onClose }) {
         data.append('foto', product.foto);
 
         let config = {
-            method: 'patch',
+            method: 'put',
             maxBodyLength: Infinity,
             url: `${BASE_API_URL}/product/${productId}`,
             headers: {
