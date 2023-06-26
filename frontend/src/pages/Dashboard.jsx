@@ -21,6 +21,7 @@ function Dashboard() {
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [productToDelete, setProductToDelete] = useState(null);
     const [loadingAction, setLoadingAction] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
     // Side Effect
     useEffect(() => {
         let config = {
@@ -88,6 +89,7 @@ function Dashboard() {
 
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
+        setCurrentPage(1);
     };
 
     const filteredProducts = products.filter((product) => {
@@ -99,6 +101,7 @@ function Dashboard() {
             harga_beli.toString().includes(lowerCaseSearchTerm) ||
             stok.toString().includes(lowerCaseSearchTerm)
         );
+
     });
 
     const formatCurrency = (value) => {
@@ -162,7 +165,13 @@ function Dashboard() {
                         }
                         <div className={styles.tableContainer}>
                             {
-                                products.length === 0 ? <h1 className={styles.emptyText}>Produk anda kosong, silahkan buat produk!</h1> : <Table columns={columns} rows={rows} itemsPerPage={5} />
+                                products.length === 0 ? <h1 className={styles.emptyText}>Produk anda kosong, silahkan buat produk!</h1> : <Table
+                                    columns={columns}
+                                    rows={rows}
+                                    itemsPerPage={5}
+                                    currentPage={currentPage} // Menyediakan currentPage sebagai prop
+                                    handlePageChange={setCurrentPage} // Menyediakan setCurrentPage sebagai prop
+                                />
                             }
                         </div>
 

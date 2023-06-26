@@ -1,18 +1,12 @@
 import React, { useState } from 'react';
 import styles from './styles/Table.module.css';
 
-function Table({ columns, rows, itemsPerPage }) {
-    const [currentPage, setCurrentPage] = useState(1);
-
+function Table({ columns, rows, itemsPerPage, currentPage, handlePageChange }) {
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = rows.slice(indexOfFirstItem, indexOfLastItem);
 
     const totalPages = Math.ceil(rows.length / itemsPerPage);
-
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
 
     const renderPageButtons = () => {
         const pageButtons = [];
